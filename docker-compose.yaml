@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: defectdojo
+      POSTGRES_USER: defectdojo
+      POSTGRES_PASSWORD: defectdojo
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  defectdojo:
+    image: defectdojo/defectdojo-django:latest
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DD_DATABASE_URL: postgresql://defectdojo:defectdojo@postgres:5432/defectdojo
+      DD_CELERY_BROKER_URL: redis://redis:6379/0
+      DD_SECRET_KEY: "change-me-in-production-very-long-secret"
+      DD_CREDENTIAL_AES_256_KEY: "change-me-too-32bytes!!"
+      DD_ALLOWED_HOSTS: "*"
+      DD_DEBUG: "True"
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
