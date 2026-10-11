@@ -53,8 +53,9 @@ security-compliance-agent/
 │   └── architecture.md
 ├── LICENSE
 └── README.md
+```
 
-Prerequisites
+## Prerequisites
 
 - Python 3.11+
 - Docker & Docker Compose
